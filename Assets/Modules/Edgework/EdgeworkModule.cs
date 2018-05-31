@@ -38,7 +38,7 @@ public class EdgeworkModule : MonoBehaviour
 	private Color Red = Color.red;
 
 	int CurrentQuestion = 0;
-	int MaxQuestions = 5;
+	int MaxQuestions = 3;
 	private Question[] Questions;
 	bool canPressButtons = false;
 	private List<string> UsedQuestions = new List<string>();
@@ -145,34 +145,34 @@ public class EdgeworkModule : MonoBehaviour
 	void HandlePress(int button) {
 		KMAudio.PlaySoundAtTransform("tick", this.transform);
 		Buttons[button].AddInteractionPunch();
-		if (!canPressButtons) {
-            Debug.LogFormat("[Edgework #{0}] Button {1} pressed during invalid time!", moduleId, button + 1);
+        if (!canPressButtons) {
+        } else if (canPressButtons && button == Questions[CurrentQuestion].CorrectButton) {
+            CurrentQuestion++;
+            DisplayCorrect();
+            if (CurrentQuestion >= MaxQuestions) {
+                BombModule.HandlePass();
+                Debug.LogFormat("[Edgework #{0}] Button {1} pressed correctly! Module Passed.", moduleId, button + 1);
+                Invoke("ClearDisplays", 0.75f);
+            } else {
+                Debug.LogFormat("[Edgework #{0}] Button {1} pressed correctly!", moduleId, button + 1);
+                Invoke("ResetDisplays", 0.75f);
+            }
+        } else if (canPressButtons && button == 1 && Questions[CurrentQuestion].Buttons[1] == "") {
+        } else if (canPressButtons) {
             BombModule.HandleStrike();
             strikeOccurred = true;
-		} else if (button == Questions[CurrentQuestion].CorrectButton && canPressButtons) {
-			CurrentQuestion++;
-			DisplayCorrect();
-			if (CurrentQuestion >= MaxQuestions) {
-				BombModule.HandlePass();
-                Debug.LogFormat("[Edgework #{0}] Button {1} pressed correctly! Module Passed.", moduleId, button + 1);
-                Invoke("ClearDisplays", 2);
-			} else {
-                Debug.LogFormat("[Edgework #{0}] Button {1} pressed correctly!", moduleId, button + 1);
-                Invoke("ResetDisplays", 2);
-			}
-		} else if (canPressButtons) {
-			BombModule.HandleStrike();
-            strikeOccurred = true;
-			DisplayIncorrect();
-			canPressButtons = false;
+            DisplayIncorrect();
+            canPressButtons = false;
             Debug.LogFormat("[Edgework #{0}] Button {1} pressed incorrectly!", moduleId, button + 1);
-            Invoke("ResetDisplays", 2);
-		} else {
+            BombModule.HandlePass();
+            Invoke("ClearDisplays", 1.25f);
+        } else {
             Debug.LogFormat("[Edgework #{0}] ERROR!", moduleId, button + 1);
             BombModule.HandleStrike();
             strikeOccurred = true;
-		}
-	}
+            BombModule.HandlePass();
+        }
+    }
 
 	void DisplayCorrect() {
 		canPressButtons = false;
