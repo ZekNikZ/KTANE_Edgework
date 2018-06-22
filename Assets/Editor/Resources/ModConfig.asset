@@ -27,6 +27,6 @@ MonoBehaviour:
     HTML: https://ktane.timwi.de/HTML/Edgework.html
 
     PDF: https://ktane.timwi.de/PDF/Edgework.pdf'
-  version: 3.0.1
+  version: 3.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 3709d1b565eb7a148942ab26c68da334, type: 3}
