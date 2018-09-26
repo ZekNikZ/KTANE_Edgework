@@ -94,7 +94,7 @@ public class EdgeworkModule : MonoBehaviour
 	}
 
 	int IndicatorNum(string label) {
-		if (!BombInfo.IsIndicatorPresent(label)) {
+		if (!BombInfo.IsIndicatorPresent(label) || (BombInfo.IsIndicatorOff(label) && BombInfo.IsIndicatorOn(label))) {
 			return 0;
 		} else if (BombInfo.IsIndicatorOff(label)) {
 			return 1;
